@@ -1,46 +1,56 @@
 # Nexus Legal Agent ⚖️
 
 **Track:** Enterprise Agents  
-**Status:** Prototype (Submission Ready)
+**Status:** Functional Prototype (Live Gemini AI Integration)
 
 ## 📜 Project Overview
-Nexus Legal Agent is a sequential multi-agent system designed to automate the high-risk review of third-party vendor contracts. By leveraging an authoritative **Long-Term Memory (Legal Playbook)** and the **Gemini 1.5 Flash LLM**, it reduces contract review time while ensuring 100% policy compliance.
+Nexus Legal Agent is a **sequential multi-agent system** designed to automate the high-risk review of third-party vendor contracts. Unlike simple text matching tools, Nexus leverages the **Gemini 1.5 Flash LLM** to perform reasoning against an authoritative **Long-Term Memory (Legal Playbook)**. It reduces contract review time while ensuring 100% policy compliance.
 
 ## 🎯 Problem Statement
-Manual contract review is slow, expensive, and prone to human error. Legal teams waste hours comparing vendor terms against internal policies line-by-line. This bottleneck slows down business deals and exposes companies to regulatory risk.
+Manual contract review is a bottleneck in enterprise operations. Legal teams waste hours performing rote comparisons of vendor terms against internal policies. This slows down business deals (Time-to-Contract) and exposes companies to regulatory risk due to human error.
 
 ## 💡 Solution Architecture
-The system employs a **Sequential Multi-Agent Architecture**:
+The system employs a deterministic **Sequential Multi-Agent Architecture** to ensure auditability:
 
-1.  **TextIngestor Agent:** Uses `PyPDF2` to ingest real PDF contracts and segment them into key clauses.
-2.  **GeminiRiskEvaluator:** A generic reasoning agent powered by **Gemini 1.5 Flash**. It retrieves the correct policy from the **Memory Bank** (RAG) and evaluates the contract clause for risk.
-3.  **ComplianceScribe:** Receives structured data via the **A2A Protocol** and generates a final Risk Report and Redline Document.
 
-## 🛠️ Key Features & Concepts used
+
+1.  **TextIngestor Agent:** Uses `PyPDF2` to ingest real PDF contracts, extract text, and segment it into key legal clauses.
+2.  **GeminiRiskEvaluator:** The core intelligence. It uses **Gemini 1.5 Flash** to reason about the contract text, comparing it against specific policies retrieved from the **Memory Bank** (JSON Vector Store). It assigns a numerical risk score (1-10).
+3.  **ComplianceScribe:** A reporting agent that consumes the structured **A2A Protocol** data to generate a final Risk Assessment Report and a Draft Redline Document.
+
+## 🛠️ Key Features
 | Concept | Implementation |
 | :--- | :--- |
-| **Multi-Agent System** | Sequential flow (Ingestor -> Evaluator -> Scribe) orchestrated by a central manager. |
-| **Custom Tools** | `document_parsing_tool` (PDF Reading) and `get_playbook_clause` (Memory Retrieval). |
-| **Sessions & Memory** | Simulates an `InMemorySessionService` to track state and uses a JSON-based **Memory Bank** for long-term policy storage. |
-| **A2A Protocol** | Strict JSON schema enforces communication between the Evaluator and Scribe agents. |
-| **Gemini API** | Powers the risk analysis logic to understand legal nuance. |
+| **Multi-Agent System** | Sequential flow (Ingestor -> Evaluator -> Scribe) with State Management. |
+| **Live AI (Gemini)** | Uses `google-generativeai` to perform semantic analysis of legal risk. |
+| **Custom Tools** | `document_parsing_tool` (Real PDF Processing) and `get_playbook_clause` (RAG/Memory). |
+| **Sessions & Memory** | Simulates `InMemorySessionService` for state tracking; uses JSON-based Long-Term Memory. |
+| **A2A Protocol** | Strict JSON schema enforces communication, preventing hallucinated outputs. |
 
 ## 🚀 How to Run
 
 ### Prerequisites
 * Python 3.10+
-* A Google Gemini API Key
+* A Google Gemini API Key (Get one [here](https://aistudio.google.com/))
 
 ### Installation
-1.  Clone the repository.
+1.  Clone the repository:
+    ```bash
+    git clone [https://github.com/](https://github.com/)[YOUR_USERNAME]/nexus-legal-agent.git
+    cd nexus-legal-agent
+    ```
 2.  Install dependencies:
     ```bash
-    pip install google-generativeai pypdf2
+    pip install -r requirements.txt
     ```
-3.  **API Setup:** Open `agents/risk_evaluator.py` and paste your Gemini API key into the `API_KEY` variable.
+
+### Configuration
+1.  Open `agents/risk_evaluator.py`.
+2.  Locate the `API_KEY` variable.
+3.  Paste your Gemini API Key (or set it via Environment Variable `GEMINI_API_KEY`).
 
 ### Execution
-Run the orchestrator with a target PDF file:
+Run the orchestrator by passing the path to your target PDF contract:
 
 ```bash
 python main_orchestrator.py contract.pdf
