@@ -1,0 +1,23 @@
+[
+    {
+        "clause_topic": "LIMITATION_OF_LIABILITY",
+        "standard_text": "Vendor's total aggregate liability shall be limited to one hundred percent (100%) of the fees paid during the trailing twelve (12) months.",
+        "risk_threshold": 4,
+        "policy_id": "P_LL_001",
+        "forbidden_phrases": ["six months", "90 days", "except in cases of gross negligence"]
+    },
+    {
+        "clause_topic": "INDEMNIFICATION",
+        "standard_text": "Vendor agrees to indemnify, defend, and hold harmless the Company from any third-party claims arising from Vendor's gross negligence or willful misconduct.",
+        "risk_threshold": 7,
+        "policy_id": "P_IND_002",
+        "forbidden_phrases": ["mutual indemnification", "company shall defend"]
+    },
+    {
+        "clause_topic": "TERMINATION_FOR_CONVENIENCE",
+        "standard_text": "Company may terminate this agreement for convenience upon sixty (60) days written notice to Vendor.",
+        "risk_threshold": 3,
+        "policy_id": "P_TERM_003",
+        "forbidden_phrases": ["no convenience termination"]
+    }
+]
